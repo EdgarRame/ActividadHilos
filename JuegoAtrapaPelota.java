@@ -9,15 +9,17 @@ import java.util.List;
 import java.util.Random;
 import Controlador.Controlador;
 public class JuegoAtrapaPelota extends JPanel {
-
-    private static final int ANCHO_PANEL = 600;
+    private static final int ANCHO_PANEL = 300;
     private static final int ALTO_PANEL = 400;
     private static final int ANCHO_JUGADOR = 60;
     private static final int ALTO_JUGADOR = 10;
     private static final int RADIO_PELOTA = 10;
     private static final Color COLOR_JUGADOR = Color.BLUE;
     private static final Color COLOR_PELOTA = Color.RED;
-    private int puntuacion = 0;
+    private int puntuacion;
+    private int Dificultad=1700;
+    private static final int MIN_DIFICULTAD = 300;
+    
 
     private boolean juegoEnEjecucion = true;
 
@@ -44,7 +46,7 @@ public class JuegoAtrapaPelota extends JPanel {
                 while (juegoEnEjecucion) {
                     crearPelota();
                     try {
-                        Thread.sleep(800);
+                        Thread.sleep(Dificultad);
                     
                     } catch (InterruptedException e) {
                         e.printStackTrace();
@@ -54,10 +56,7 @@ public class JuegoAtrapaPelota extends JPanel {
         });
         pelotaThread.start();
     }
-    private void Dificultad(){
-        
-    
-}
+ 
     private void mover() {
         for (Pelota pelota : pelotas) {
             pelota.mover();
@@ -72,6 +71,9 @@ public class JuegoAtrapaPelota extends JPanel {
             if (jugadorRect.intersects(pelotaRect)) {
                 pelotas.remove(i);
                 puntuacion++;
+                if (puntuacion % 2 == 0) {
+                    Dificultad = Math.max(Dificultad - 100, MIN_DIFICULTAD); 
+                }
                 break;
             }
             else if (pelota.estaFuera(ALTO_PANEL)) {
@@ -95,6 +97,7 @@ public class JuegoAtrapaPelota extends JPanel {
         pelotas.clear();
         juegoEnEjecucion = true;
         puntuacion = 0;
+        Dificultad = 1700;
     }
     private void salirDelJuego() {
         JOptionPane.showMessageDialog(
@@ -125,7 +128,6 @@ public class JuegoAtrapaPelota extends JPanel {
         // Mostrar puntuación
         g2d.setColor(Color.BLACK);
         g2d.drawString("Puntuación: " + puntuacion, 10, 20);
-
     }
     public int getAnchoPanel() {
         return ANCHO_PANEL;
@@ -136,8 +138,7 @@ public class JuegoAtrapaPelota extends JPanel {
     public int getJugadorX() {
         return jugadorX;
     }
-    public void setJugadorX(int jugadorX) {
+        public void setJugadorX(int jugadorX) {
         this.jugadorX = jugadorX;
     }
 }
-
